@@ -1,0 +1,8 @@
+---
+:backends: yaml
+:yaml:
+  :datadir: /etc/puppetlabs/code/hieradata
+:hierarchy: common
+:logger: puppet
+:merge_behavior: native
+:deep_merge_options: {}

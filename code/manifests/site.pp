@@ -1,5 +1,7 @@
-node defalut{
+# pkgng::repo { 'pkg.freebsd.org': }
+  #	Package {
+  #  		provider => pkgng
+ #}
 
-}
 
 
