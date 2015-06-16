@@ -18,18 +18,4 @@ class postfixadmin{
 		ensure => 'file',
 		require => Package['postfixadmin'],	
 	}
-	file{'/usr/local/www/postfixadmin':
-		ensure => 'directory',
-		owner => 'www',
-		recurse => true,
-	}
-	service{'apache24':
-		ensure => 'running',
-	}
-	service{'dovecot':
-		ensure => 'running',
-	}
-	service{'dovecot':
-		ensure => 'running',
-	}
 }

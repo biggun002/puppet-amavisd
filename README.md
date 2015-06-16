@@ -17,8 +17,13 @@ puppet module install puppetlabs-mysql
 ### Make it run at startup
 #### /etc/rc.d/puppet
 #### /etc/rc.d/puppetmaster
-** \*\* don't forget to change permission to them \*\* **
+**don't forget to change permission to them**
 
+
+**pkgng** edit here to solve the problem
+```
+/usr/local/lib/ruby/gems/2.1/gems/puppet-4.1.0/lib/puppet/provider/package/pkgng.rb
+```
 
 
 ---

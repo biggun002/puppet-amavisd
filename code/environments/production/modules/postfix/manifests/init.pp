@@ -18,6 +18,18 @@ class postfix{
 		source => 'puppet:///modules/postfix/postfix',
 		require => Package['postfix'],
 	}
+	
+	file{'/usr/local/etc/postfix/main.cf' :
+		ensure => 'file',
+		source => 'puppet://modules/postfix/postfix/main.cf',
+		require => Package['postfix'],
+	}
+
+	file{'/usr/local/etc/postfix/master.cf' :
+		ensure => 'file',
+		source => 'puppet://modules/postfix/postfix/master.cf',
+		require => Package['postfix'],
+	}
 
 	file{'/usr/local/etc/ssl/postfix' :
 		ensure => 'directory',

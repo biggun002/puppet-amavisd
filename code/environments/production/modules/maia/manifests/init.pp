@@ -21,12 +21,12 @@ class maia{
 
 	exec{'sa-update' :
 		path => '/usr/sbin',
-		require => package['spamassassin'],
+		require => Package['spamassassin'],
 	}
 	
-	exec{'load-sa-rules.pl' --debug :
+	exec{'load-sa-rules.pl' :
                   path => '/usr/local/shared/maia/scripts',
-                  require => [Package['maia'], package['spamassassin']],
+                  require => [Package['maia'], Package['spamassassin']],
 		  user => 'vscan', 
         }
 
@@ -38,7 +38,7 @@ class maia{
 
 	exec{'apachectl graceful' :
 		path => '/usr/sbin',
-		require => [Package['apache24'],File['/usr/local/www/maia/config.php'], File['/usr/local/etc/apache24/Includes/maia.conf']],
+		require => [Package['apache24'],File['/usr/local/www/maia/config.php']],
 	}
 	
 	file{'/usr/local/etc/maia/maiad.conf' :
@@ -83,7 +83,7 @@ cron{'send-quarantine-digests':
 	minute => 50,
 }
 
-cron{'send-quarantine-digests':
+cron{'sa-learn':
 	command => 'perl /usr/local/bin/sa-learn --sync --force-expire > /dev/null',
 	user => vscan,
 	minute => 45,

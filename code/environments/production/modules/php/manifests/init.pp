@@ -7,7 +7,4 @@ class php{
 		ensure => 'file',
 		require => Package['mod_php56'],
 	}
-	service{'apache24':
-		ensure => 'running',
-	}
 }
