@@ -41,8 +41,9 @@ class postfix{
 		subscribe => [File['/usr/local/etc/postfix/main.cf'], File['/usr/local/etc/postfix/master.cf']],
 	}
 	
-	exec{'openssl req -new -x509 -nodes -out smtpd.pem -keyout smtpd.pem -days 3650' :
-		path => '/usr/sbin',
+	exec{'execopenssl' :
+		path => '/usr/bin',
+		command => 'openssl req -new -x509 -nodes -out smtpd.pem -keyout smtpd.pem -days 3650',
 		cwd => '/usr/local/etc/ssl/postfix',
 		require => Package['postfix'],
 	}

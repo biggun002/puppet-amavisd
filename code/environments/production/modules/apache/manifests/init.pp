@@ -25,19 +25,22 @@ class apache{
 		ensure => 'directory',
 		require => Package['apache24'],
 	}
-	exec{'openssl genrsa -des3 -out server.key 1024' :
-		path => '/usr/sbin',
+	exec{'opensslgenrsa' :
+		path => '/usr/bin',
+		command => 'openssl genrsa -des3 -out server.key 1024',
 		cwd => '/usr/local/etc/ssl/apache',
 		require => File['/usr/local/etc/ssl/apache'],
 	}
 
-	exec{'openssl req -new -key server.key -out server.csr' :
-                path => '/usr/sbin',
+	exec{'opensslreq' :
+                path => '/usr/bin',
+		command => 'openssl req -new -key server.key -out server.csr', 
                 cwd => '/usr/local/etc/ssl/apache',
 		require => File['/usr/local/etc/ssl/apache'],
         }
-	exec{'openssl x509 -req -days 365 -in server.csr -signkey server.key -out server.crt' :
-                path => '/usr/sbin',
+	exec{'opensslx509' :
+                path => '/usr/bin',
+		command => 'openssl x509 -req -days 365 -in server.csr -signkey server.key -out server.crt',
                 cwd => '/usr/local/etc/ssl/apache',
 		require => File['/usr/local/etc/ssl/apache'],
         }

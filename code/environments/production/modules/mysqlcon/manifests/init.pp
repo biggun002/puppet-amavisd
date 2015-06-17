@@ -23,5 +23,5 @@ class mysqlcon{
 		sql => 'puppet:///modules/mysqlcon/maia-mysql.sql',
 		grant => 'ALL',
 	}
-
+	
 }	
