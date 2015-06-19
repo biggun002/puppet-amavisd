@@ -14,21 +14,40 @@ class maia{
 		require => Package['maia'],
 	}
 
-	exec{'configtest.pl' :
-		path => '/usr/local/shared/maia/scripts',
+	file{'/usr/local/etc/maia/mail':
+		ensure => 'directory',
+		require => Package['maia'],
+	}
+	
+	file{'/usr/local/etc/maia/mail/spamassassin':
+		ensure => 'directory',
+		require => [File['/usr/local/etc/maia/mail'],Package['maia']],
+	}
+
+	exec{'configtest' :
+		path => '/usr/local/bin/',
+		command => 'perl /usr/local/share/maia/scripts/configtest.pl',
 		require => Package['maia'],
 	}
 
 	exec{'sa-update' :
-		path => '/usr/sbin',
+		path => '/usr/local/bin',
 		require => Package['spamassassin'],
 	}
 	
-	exec{'load-sa-rules.pl' :
-                  path => '/usr/local/shared/maia/scripts',
+	exec{'load-sa-rules' :
+		  path => '/usr/local/bin/',
+                  command => 'perl /usr/local/share/maia/scripts/load-sa-rules.pl',
                   require => [Package['maia'], Package['spamassassin']],
 		  user => 'vscan', 
         }
+
+	file{'/usr/local/www/maia':
+		ensure => 'present',
+		require => Package['maia'],
+		mode => '0777',
+		recurse => true,
+	}	
 
 	file{'/usr/local/www/maia/config.php' :
 		ensure => 'file',
@@ -36,8 +55,9 @@ class maia{
 		require => Package['maia'],
 	}
 
-	exec{'apachectl graceful' :
-		path => '/usr/sbin',
+	exec{'graceful' :
+		path => '/usr/local/sbin',
+		command => 'apachectl graceful',
 		require => [Package['apache24'],File['/usr/local/www/maia/config.php']],
 	}
 	

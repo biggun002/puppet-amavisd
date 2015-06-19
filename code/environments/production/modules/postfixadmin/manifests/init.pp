@@ -4,7 +4,7 @@ class postfixadmin{
 	}
 	file{'/usr/local/www/postfixadmin':
 		ensure => 'present',
-		mode => '0750',
+		mode => '0777',
 		recurse => true,
 		require => Package['postfixadmin'],
 	}
