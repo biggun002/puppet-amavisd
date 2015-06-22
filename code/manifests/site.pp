@@ -8,7 +8,7 @@ node default{
         include apache
         include clamav
         include dovecot
-        include maia
+        include amavisd
         include mysqlcon
 	include '::mysql::server'
         include pear
@@ -16,21 +16,6 @@ node default{
         include postfix
         include postfixadmin
 	include adduser
-	include saupdate
-	include spamassassin
-}
-
-node notdefault{
-	include fixpkg
-	include apache
-	include clamav
-	include dovecot
-	include maia
-	include mysqlcon
-	include pear
-	include php
-	include postfix
-	include postfixadmin
 	include saupdate
 	include spamassassin
 }

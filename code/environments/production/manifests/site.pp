@@ -5,7 +5,6 @@
 #}
 
 node default{
-	include adduser
 }
 
 
