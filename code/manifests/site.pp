@@ -10,7 +10,6 @@ node default{
         include dovecot
         include amavisd
         include mysqlcon
-	include '::mysql::server'
         include pear
         include php
         include postfix

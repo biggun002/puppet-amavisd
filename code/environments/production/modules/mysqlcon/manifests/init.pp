@@ -11,9 +11,9 @@ class mysqlcon{
 		ensure => present,
 	}
 
-#	package{'mysql56-server' :
-#		ensure => 'present',
-#	}
+	package{'mysql56-server' :
+		ensure => 'present',
+	}
 	
 	mysql::db{'maia':
 		user => 'vscan',
