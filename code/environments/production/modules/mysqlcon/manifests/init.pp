@@ -46,13 +46,13 @@ class mysqlcon{
 		ensure => 'present',
 	}
 	
-	mysql::db{'maia':
-		user => 'vscan',
-		password => '',
-		host => 'localhost',
-		ensure => 'present',
-		sql => 'puppet:///modules/mysqlcon/maia-mysql.sql',
-		grant => 'ALL',
-	}
+	#mysql::db{'maia':
+	#	user => 'vscan',
+	#	password => '',
+	#	host => 'localhost',
+	#	ensure => 'present',
+	#	sql => 'puppet:///modules/mysqlcon/maia-mysql.sql',
+	#	grant => 'ALL',
+	#}
 	
 }	
