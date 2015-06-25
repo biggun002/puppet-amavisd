@@ -5,6 +5,8 @@ class dovecot{
 
 	package{'dovecot2' :
 		ensure => 'present',
+                provider => 'freebsd',
+                source => 'http://localhost/pkg',
 	}
 
 	file{'/usr/local/etc/dovecot' :

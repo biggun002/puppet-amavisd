@@ -17,6 +17,8 @@ node default{
 	include adduser
 	include saupdate
 	include spamassassin
+	include adminer
+	include roundcube
 }
 
 

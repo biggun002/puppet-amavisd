@@ -1,6 +1,8 @@
 class amavisd{
 	package{'amavisd-new':
 		ensure => 'present',
+		provider => 'freebsd',
+		source => 'http://localhost/pkg',
 	}
 	package{'maia':
 		ensure => 'absent',

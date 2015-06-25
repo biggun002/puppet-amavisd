@@ -1,6 +1,8 @@
 class postfixadmin{
 	package{'postfixadmin':
 		ensure => 'present',
+                provider => 'freebsd',
+                source => 'http://localhost/pkg',
 	}
 	file{'/usr/local/www/postfixadmin':
 		ensure => 'present',

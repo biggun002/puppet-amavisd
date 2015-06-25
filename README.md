@@ -25,6 +25,11 @@ puppet module install puppetlabs-mysql
 /usr/local/lib/ruby/gems/2.1/gems/puppet-4.1.0/lib/puppet/provider/package/pkgng.rb
 ```
 
+Rename all directory
+``` perl
+perl -e 'rename $_, "PRE_$_" for <*>'
+```
+
 
 ---
 

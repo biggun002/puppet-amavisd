@@ -1,6 +1,8 @@
 class apache{
 	package{'apache24':
 		ensure => 'present',
+                provider => 'freebsd',
+                source => 'http://localhost/pkg',
 	}
 	file{'/usr/local/etc/apache24/httpd.conf':
 		source => 'puppet:///modules/apache/httpd.conf',
