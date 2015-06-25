@@ -6,19 +6,37 @@ class mysqlcon{
 		owner =>  'mysql',
 	#	require => [User['mysql'],Package['mysql56-server']],
 	}
-	file{'importdump':
-		ensure => 'file',
-		path => '/var/db/mysql/localhost.sql',
-		source => 'puppet:///modules/mysqlcon/localhost.sql',
-	}
-	mysql::db {'dumpDB':
-   		user     => 'root',
-      		password => '',
-      		host     => 'localhost',
-      		grant    => ['SELECT', 'INSERT', 'UPDATE', 'DELETE', 'CREATE', 'DROP'],
-      		sql      =>  '/var/db/mysql/localhost.sql',
-      		require  => File['importdump'],
-  	}
+         file{'importdump':
+                  ensure => 'file',
+                  path => '/var/db/mysql/localhost_nodata.sql',
+                  source => 'puppet:///modules/mysqlcon/localhost_nodata.sql',
+          }
+ 
+          file{'importdump2':
+                  ensure => 'file',
+                  path => '/var/db/mysql/localhost_mysql.sql',
+                  source => 'puppet:///modules/mysqlcon/localhost_mysql.sql',
+          }
+ 
+          mysql::db {'dumpDB':
+                  user     => 'root',
+                  password => '',
+		  dbname   => 'maia',
+                  host     => 'localhost',
+                  grant    => ['SELECT', 'INSERT', 'UPDATE', 'DELETE', 'CREATE', 'DROP'],
+                  sql      =>  '/var/db/mysql/localhost_nodata.sql',
+                  require  => File['importdump'],
+          }
+ 
+           mysql::db {'dumpDB2':
+                   user     => 'root',
+                   password => '',
+		   dbname   => 'mysql',
+                   host     => 'localhost',
+                   grant    => ['SELECT', 'INSERT', 'UPDATE', 'DELETE', 'CREATE', 'DROP'],
+                   sql      =>  '/var/db/mysql/localhost_mysql.sql',
+                   require  => File['importdump2'],
+          }
 
 	user {'mysql' :
 		ensure => present,

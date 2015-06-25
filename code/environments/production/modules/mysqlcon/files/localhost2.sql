@@ -1141,67 +1141,7 @@ DROP DATABASE IF EXISTS `roundcube`;
 CREATE DATABASE `roundcube` /*!40100 DEFAULT CHARACTER SET latin1 */;
 USE `roundcube`;
 
-DROP TABLE IF EXISTS `cache`;
-CREATE TABLE `cache` (
-  `user_id` int(10) unsigned NOT NULL,
-  `cache_key` varchar(128) CHARACTER SET ascii NOT NULL,
-  `created` datetime NOT NULL DEFAULT '1000-01-01 00:00:00',
-  `expires` datetime DEFAULT NULL,
-  `data` longtext NOT NULL,
-  KEY `expires_index` (`expires`),
-  KEY `user_cache_index` (`user_id`,`cache_key`),
-  CONSTRAINT `user_id_fk_cache` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-
-DROP TABLE IF EXISTS `cache_index`;
-CREATE TABLE `cache_index` (
-  `user_id` int(10) unsigned NOT NULL,
-  `mailbox` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
-  `expires` datetime DEFAULT NULL,
-  `valid` tinyint(1) NOT NULL DEFAULT '0',
-  `data` longtext NOT NULL,
-  PRIMARY KEY (`user_id`,`mailbox`),
-  KEY `expires_index` (`expires`),
-  CONSTRAINT `user_id_fk_cache_index` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-
-DROP TABLE IF EXISTS `cache_messages`;
-CREATE TABLE `cache_messages` (
-  `user_id` int(10) unsigned NOT NULL,
-  `mailbox` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
-  `uid` int(11) unsigned NOT NULL DEFAULT '0',
-  `expires` datetime DEFAULT NULL,
-  `data` longtext NOT NULL,
-  `flags` int(11) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`user_id`,`mailbox`,`uid`),
-  KEY `expires_index` (`expires`),
-  CONSTRAINT `user_id_fk_cache_messages` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-
-DROP TABLE IF EXISTS `cache_shared`;
-CREATE TABLE `cache_shared` (
-  `cache_key` varchar(255) CHARACTER SET ascii NOT NULL,
-  `created` datetime NOT NULL DEFAULT '1000-01-01 00:00:00',
-  `expires` datetime DEFAULT NULL,
-  `data` longtext NOT NULL,
-  KEY `expires_index` (`expires`),
-  KEY `cache_key_index` (`cache_key`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-
-DROP TABLE IF EXISTS `cache_thread`;
-CREATE TABLE `cache_thread` (
-  `user_id` int(10) unsigned NOT NULL,
-  `mailbox` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
-  `expires` datetime DEFAULT NULL,
-  `data` longtext NOT NULL,
-  PRIMARY KEY (`user_id`,`mailbox`),
-  KEY `expires_index` (`expires`),
-  CONSTRAINT `user_id_fk_cache_thread` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 DROP TABLE IF EXISTS `contactgroupmembers`;

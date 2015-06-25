@@ -17,18 +17,24 @@ class clamav{
 	}
 	file{'/var/log/clamav':
 		ensure => 'directory',
+		mode => '0777',
+		recurse => 'true',
 		require => [Package['clamav'],User['vscan']],
-		owner => 'vscan',
+		owner => 'clamav',
 	}
 	file{'/var/run/clamav':
 		ensure => 'directory',
+		mode => '0777',
+		recurse => 'true',
 		require => [Package['clamav'],User['vscan']],
-		owner => 'vscan',
+		owner => 'clamav',
 	}
 	file{'/var/db/clamav':
 		ensure => 'directory',
+		mode => '0777',
+		recurse => 'true',
 		require => [Package['clamav'],User['vscan']],
-		owner => 'vscan',
+		owner => 'clamav',
 	}
 	service{'clamav-freshclam':
 		ensure => 'running',
