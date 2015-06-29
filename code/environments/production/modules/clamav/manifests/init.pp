@@ -24,10 +24,9 @@ class clamav{
 	}
 	file{'/var/run/clamav':
 		ensure => 'directory',
-		mode => '0777',
-		recurse => 'true',
 		require => [Package['clamav'],User['vscan']],
 		owner => 'clamav',
+		ignore => 'clamd.sock',
 	}
 	file{'/var/db/clamav':
 		ensure => 'directory',

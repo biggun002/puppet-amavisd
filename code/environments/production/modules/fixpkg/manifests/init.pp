@@ -26,6 +26,6 @@ class fixpkg{
    exec{'pkgupdate':
 	command => 'pkg update',
 	path => '/usr/sbin',
-	require => [File['/usr/local/etc/pkg/repos/FreeBSD.conf'],File['/etc/pkg/FreeBSD.conf']],
+	subscribe => [File['/usr/local/etc/pkg/repos/FreeBSD.conf'],File['/etc/pkg/FreeBSD.conf']],
    }
 }
