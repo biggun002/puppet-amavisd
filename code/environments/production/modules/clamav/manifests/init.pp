@@ -1,8 +1,6 @@
 class clamav{
 	package{'clamav':
 		ensure	=> 'present',
-                provider => 'freebsd',
-                source => 'http://localhost/pkg',
 	}
 	user{'vscan':
 		ensure => 'present',

@@ -5,13 +5,13 @@
 
 node default{
  	include fixpkg
+        include php
         include apache
         include clamav
         include dovecot
         include amavisd
         include mysqlcon
         include pear
-        include php
         include postfix
         include postfixadmin
 	include adduser

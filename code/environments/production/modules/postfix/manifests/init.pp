@@ -5,8 +5,6 @@ class postfix{
 	
 	package{'postfix' :
 		ensure => 'present',
-                provider => 'freebsd',
-                source => 'http://localhost/pkg',
 	}
 	
 	file{'/etc/periodic.conf' :

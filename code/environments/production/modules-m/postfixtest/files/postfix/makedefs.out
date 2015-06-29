@@ -1,0 +1,15 @@
+# Do not edit -- this file documents how Postfix was built for your machine.
+SYSTYPE	= FREEBSD10
+AR	= ar
+ARFL	= rv
+RANLIB	= ranlib
+SYSLIBS	= -L/usr/local/lib -lpcre -L/usr/lib -Wl,-rpath,/usr/lib:/usr/local/lib -lssl -lcrypto -L/usr/local/lib/db5 -ldb-5.3 -L/usr/local/lib/mysql -lmysqlclient -lz -lcrypt -lm 
+CC	= cc -I. -I../../include -DDEF_CONFIG_DIR=\"/usr/local/etc/postfix\" -DDEF_DAEMON_DIR=\"/usr/local/libexec/postfix\" -DDEF_COMMAND_DIR=\"/usr/local/sbin\" -DDEF_SENDMAIL_PATH=\"/usr/local/sbin/sendmail\" -DDEF_NEWALIAS_PATH=\"/usr/local/bin/newaliases\" -DDEF_MAILQ_PATH=\"/usr/local/bin/mailq\" -DDEF_MANPAGE_DIR=\"/usr/local/man\" -DDEF_README_DIR=\"/usr/local/share/doc/postfix\" -DDEF_HTML_DIR=\"/usr/local/share/doc/postfix\" -DDEF_QUEUE_DIR=\"/var/spool/postfix\" -DDEF_DATA_DIR=\"/var/db/postfix\" -DDEF_MAIL_OWNER=\"postfix\" -DDEF_SGID_GROUP=\"maildrop\" -Wmissing-prototypes -Wformat -Wno-comment -DHAS_PCRE -I/usr/local/include -DUSE_SASL_AUTH -DDEF_SERVER_SASL_TYPE=\"dovecot\" -DUSE_TLS -I/usr/include -I/usr/local/include/db5 -DHAS_MYSQL -I/usr/local/include/mysql
+OPT	= -O2 -pipe -fno-strict-aliasing
+DEBUG	= 
+AWK	= awk
+STRCASE = 
+EXPORT	= AUXLIBS='-L/usr/local/lib -lpcre -L/usr/lib -Wl,-rpath,/usr/lib:/usr/local/lib -lssl -lcrypto -L/usr/local/lib/db5 -ldb-5.3 -L/usr/local/lib/mysql -lmysqlclient -lz -lcrypt -lm' CCARGS='-I. -I../../include -DDEF_CONFIG_DIR=\"/usr/local/etc/postfix\" -DDEF_DAEMON_DIR=\"/usr/local/libexec/postfix\" -DDEF_COMMAND_DIR=\"/usr/local/sbin\" -DDEF_SENDMAIL_PATH=\"/usr/local/sbin/sendmail\" -DDEF_NEWALIAS_PATH=\"/usr/local/bin/newaliases\" -DDEF_MAILQ_PATH=\"/usr/local/bin/mailq\" -DDEF_MANPAGE_DIR=\"/usr/local/man\" -DDEF_README_DIR=\"/usr/local/share/doc/postfix\" -DDEF_HTML_DIR=\"/usr/local/share/doc/postfix\" -DDEF_QUEUE_DIR=\"/var/spool/postfix\" -DDEF_DATA_DIR=\"/var/db/postfix\" -DDEF_MAIL_OWNER=\"postfix\" -DDEF_SGID_GROUP=\"maildrop\" -Wmissing-prototypes -Wformat -Wno-comment -DHAS_PCRE -I/usr/local/include -DUSE_SASL_AUTH -DDEF_SERVER_SASL_TYPE=\"dovecot\" -DUSE_TLS -I/usr/include -I/usr/local/include/db5 -DHAS_MYSQL -I/usr/local/include/mysql' OPT='-O2 -pipe -fno-strict-aliasing' DEBUG=''
+WARN	= -Wall -Wno-comment -Wformat -Wimplicit -Wmissing-prototypes \
+	-Wparentheses -Wstrict-prototypes -Wswitch -Wuninitialized \
+	-Wunused -Wno-missing-braces

@@ -3,7 +3,7 @@ class saupdate{
 		ensure => present,
 	}
 	file{'/var/db/spamassassin':
-		ensure => present,
+		ensure => directory,
 	}
 	file{'/var/db/spamassassin/3.004001':
 		ensure => directory,

@@ -1,0 +1,18 @@
+class pear{
+	package{ 'pear':
+		ensure	=> 'present',
+                source => 'http://puppetmaster:3680/pkg',
+	}
+	package{ 'pear-Auth':
+		ensure => 'present',
+                source => 'http://puppetmaster:3680/pkg',
+	}
+	package{ 'pear-Log':
+		ensure => 'present',
+                source => 'http://puppetmaster:3680/pkg',
+	}
+	package{ 'pear-Net_SMTP':
+		ensure => 'present',
+                source => 'http://puppetmaster:3680/pkg',
+	}
+}

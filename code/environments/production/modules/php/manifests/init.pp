@@ -5,6 +5,9 @@ class php{
 	package{'php56-mysql':
 		ensure => 'present',
 	}
+	package{'php56-imap':
+		ensure => 'present',
+	}
 	package{'mod_php56':
 		ensure => 'present',
 	}
