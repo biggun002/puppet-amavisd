@@ -2,6 +2,7 @@ ca_root_nss
 php56
 php56-mysql
 php56-imap
+php56-fileinfo
 mod_php56
 apache24
 amavisd-new
