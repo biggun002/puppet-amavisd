@@ -56,4 +56,11 @@ class postfix{
 		path => '/usr/bin',
 		subscribe => File['/etc/aliases'],
 	}
+	
+	exec{'copyaliases':
+		path => '/bin',
+		cwd => '/etc/mail',
+		command => 'cp aliases.db ..',
+		require => Exec['newaliases'],
+	}
 }	

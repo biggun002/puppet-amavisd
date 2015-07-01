@@ -13,4 +13,7 @@ class amavisd{
 		source => 'puppet:///modules/amavisd/amavisd.conf',
 		require => Package['amavisd-new'],
 	}
+	file{'/var/log/local0':
+		ensure => 'present',
+	}
 }

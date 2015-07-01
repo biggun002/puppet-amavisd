@@ -7,6 +7,10 @@ class php{
 	}
 	package{'php56-imap':
 		ensure => 'present',
+		require => [Package['php56'],Package['cclient']],
+	}
+	package{'cclient':
+		ensure => 'present',
 	}
 	package{'mod_php56':
 		ensure => 'present',

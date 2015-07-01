@@ -33,7 +33,7 @@ class dovecot{
 		ensure => 'directory',
 		owner => 'vscan',
 		group => 'vscan',
-		mode => '0740',
+		mode => '0777',
 		require => [Package['dovecot-pigeonhole'],Package['dovecot2']],
 		recurse => 'true',
 	}
@@ -52,5 +52,16 @@ class dovecot{
 		path => '/usr/bin',
 		cwd => '/usr/local/etc/ssl/dovecot',
 		require => File['/usr/local/etc/ssl/dovecot'],
+	}
+
+	file{'/usr/local/libexec/dovecot/dovecot-lda':
+		ensure => 'present',
+		group => 'vscan',
+		mode => '04750',
+	}
+	file{'/usr/local/libexec/dovecot/deliver':
+		ensure => 'present',
+		group => 'vscan',
+		mode => '04750',
 	}
 }	

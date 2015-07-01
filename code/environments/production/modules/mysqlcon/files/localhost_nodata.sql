@@ -3,6 +3,7 @@
 SET NAMES utf8;
 SET time_zone = '+00:00';
 
+DROP DATABASE IF EXISTS `maia`;
 CREATE DATABASE `maia` /*!40100 DEFAULT CHARACTER SET utf8 */;
 USE `maia`;
 
@@ -137,6 +138,7 @@ CREATE TABLE `wblist` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
+DROP DATABASE IF EXISTS `postfix`;
 CREATE DATABASE `postfix` /*!40100 DEFAULT CHARACTER SET latin1 */;
 USE `postfix`;
 
@@ -314,5 +316,5 @@ CREATE TABLE `vacation_notification` (
   CONSTRAINT `vacation_notification_pkey` FOREIGN KEY (`on_vacation`) REFERENCES `vacation` (`email`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Postfix Admin - Virtual Vacation Notifications';
 
-
--- 2015-06-24 12:01:38
+DROP DATABASE IF EXISTS `roundcube`;
+CREATE DATABASE `roundcube`;

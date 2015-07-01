@@ -23,4 +23,10 @@ class roundcube{
 		source => 'puppet:///modules/roundcube/plugins-password-config.inc.php',
 		require => Package['roundcube'],
 	}
+	exec{'importsql':
+		path => '/usr/local/bin',
+		cwd => '/usr/local/www/roundcube/SQL',	
+		command => 'mysql -uroundcube roundcube < mysql.initial.sql',
+		require => Package['roundcube'],
+	}
 }

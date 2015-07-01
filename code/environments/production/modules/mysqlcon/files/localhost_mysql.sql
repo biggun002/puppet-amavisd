@@ -5,6 +5,7 @@ SET time_zone = '+00:00';
 SET foreign_key_checks = 0;
 SET sql_mode = 'NO_AUTO_VALUE_ON_ZERO';
 
+DROP DATABASE IF EXISTS `mysql`;
 CREATE DATABASE `mysql` /*!40100 DEFAULT CHARACTER SET latin1 */;
 USE `mysql`;
 
@@ -20,6 +21,7 @@ CREATE TABLE `columns_priv` (
   PRIMARY KEY (`Host`,`Db`,`User`,`Table_name`,`Column_name`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='Column privileges';
 
+TRUNCATE `columns_priv`;
 
 DROP TABLE IF EXISTS `db`;
 CREATE TABLE `db` (
@@ -49,6 +51,7 @@ CREATE TABLE `db` (
   KEY `User` (`User`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='Database privileges';
 
+TRUNCATE `db`;
 INSERT INTO `db` (`Host`, `Db`, `User`, `Select_priv`, `Insert_priv`, `Update_priv`, `Delete_priv`, `Create_priv`, `Drop_priv`, `Grant_priv`, `References_priv`, `Index_priv`, `Alter_priv`, `Create_tmp_table_priv`, `Lock_tables_priv`, `Create_view_priv`, `Show_view_priv`, `Create_routine_priv`, `Alter_routine_priv`, `Execute_priv`, `Event_priv`, `Trigger_priv`) VALUES
 ('%',	'test',	'',	'Y',	'Y',	'Y',	'Y',	'Y',	'Y',	'N',	'Y',	'Y',	'Y',	'Y',	'Y',	'Y',	'Y',	'Y',	'N',	'N',	'Y',	'Y'),
 ('%',	'test\\_%',	'',	'Y',	'Y',	'Y',	'Y',	'Y',	'Y',	'N',	'Y',	'Y',	'Y',	'Y',	'Y',	'Y',	'Y',	'Y',	'N',	'N',	'Y',	'Y'),
@@ -83,6 +86,7 @@ CREATE TABLE `event` (
   PRIMARY KEY (`db`,`name`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='Events';
 
+TRUNCATE `event`;
 
 DROP TABLE IF EXISTS `func`;
 CREATE TABLE `func` (
@@ -93,6 +97,7 @@ CREATE TABLE `func` (
   PRIMARY KEY (`name`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='User defined functions';
 
+TRUNCATE `func`;
 
 DROP TABLE IF EXISTS `general_log`;
 CREATE TABLE `general_log` (
@@ -104,6 +109,7 @@ CREATE TABLE `general_log` (
   `argument` mediumtext NOT NULL
 ) ENGINE=CSV DEFAULT CHARSET=utf8 COMMENT='General log';
 
+TRUNCATE `general_log`;
 
 DROP TABLE IF EXISTS `help_category`;
 CREATE TABLE `help_category` (
@@ -115,6 +121,7 @@ CREATE TABLE `help_category` (
   UNIQUE KEY `name` (`name`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='help categories';
 
+TRUNCATE `help_category`;
 INSERT INTO `help_category` (`help_category_id`, `name`, `parent_category_id`, `url`) VALUES
 (1,	'Geographic',	0,	''),
 (2,	'Polygon properties',	35,	''),
@@ -165,6 +172,7 @@ CREATE TABLE `help_keyword` (
   UNIQUE KEY `name` (`name`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='help keywords';
 
+TRUNCATE `help_keyword`;
 INSERT INTO `help_keyword` (`help_keyword_id`, `name`) VALUES
 (0,	'JOIN'),
 (1,	'HOST'),
@@ -673,6 +681,7 @@ CREATE TABLE `help_relation` (
   PRIMARY KEY (`help_keyword_id`,`help_topic_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='keyword-topic relation';
 
+TRUNCATE `help_relation`;
 INSERT INTO `help_relation` (`help_topic_id`, `help_keyword_id`) VALUES
 (0,	0),
 (464,	0),
@@ -1794,6 +1803,7 @@ CREATE TABLE `help_topic` (
   UNIQUE KEY `name` (`name`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='help topics';
 
+TRUNCATE `help_topic`;
 INSERT INTO `help_topic` (`help_topic_id`, `name`, `help_category_id`, `description`, `example`, `url`) VALUES
 (0,	'JOIN',	28,	'MySQL supports the following JOIN syntaxes for the table_references\npart of SELECT statements and multiple-table DELETE and UPDATE\nstatements:\n\ntable_references:\n    escaped_table_reference [, escaped_table_reference] ...\n\nescaped_table_reference:\n    table_reference\n  | { OJ table_reference }\n\ntable_reference:\n    table_factor\n  | join_table\n\ntable_factor:\n    tbl_name [PARTITION (partition_names)] \n        [[AS] alias] [index_hint_list]\n  | table_subquery [AS] alias\n  | ( table_references )\n\njoin_table:\n    table_reference [INNER | CROSS] JOIN table_factor [join_condition]\n  | table_reference STRAIGHT_JOIN table_factor\n  | table_reference STRAIGHT_JOIN table_factor ON conditional_expr\n  | table_reference {LEFT|RIGHT} [OUTER] JOIN table_reference join_condition\n  | table_reference NATURAL [{LEFT|RIGHT} [OUTER]] JOIN table_factor\n\njoin_condition:\n    ON conditional_expr\n  | USING (column_list)\n\nindex_hint_list:\n    index_hint [, index_hint] ...\n\nindex_hint:\n    USE {INDEX|KEY}\n      [FOR {JOIN|ORDER BY|GROUP BY}] ([index_list])\n  | IGNORE {INDEX|KEY}\n      [FOR {JOIN|ORDER BY|GROUP BY}] (index_list)\n  | FORCE {INDEX|KEY}\n      [FOR {JOIN|ORDER BY|GROUP BY}] (index_list)\n\nindex_list:\n    index_name [, index_name] ...\n\nA table reference is also known as a join expression.\n\nIn MySQL 5.6.2 and later, a table reference (when it refers to a\npartitioned table) may contain a PARTITION option, including a\ncomma-separated list of partitions, subpartitions, or both. This option\nfollows the name of the table and precedes any alias declaration. The\neffect of this option is that rows are selected only from the listed\npartitions or subpartitions---in other words, any partitions or\nsubpartitions not named in the list are ignored For more information,\nsee http://dev.mysql.com/doc/refman/5.6/en/partitioning-selection.html.\n\nThe syntax of table_factor is extended in comparison with the SQL\nStandard. The latter accepts only table_reference, not a list of them\ninside a pair of parentheses.\n\nThis is a conservative extension if we consider each comma in a list of\ntable_reference items as equivalent to an inner join. For example:\n\nSELECT * FROM t1 LEFT JOIN (t2, t3, t4)\n                 ON (t2.a=t1.a AND t3.b=t1.b AND t4.c=t1.c)\n\nis equivalent to:\n\nSELECT * FROM t1 LEFT JOIN (t2 CROSS JOIN t3 CROSS JOIN t4)\n                 ON (t2.a=t1.a AND t3.b=t1.b AND t4.c=t1.c)\n\nIn MySQL, JOIN, CROSS JOIN, and INNER JOIN are syntactic equivalents\n(they can replace each other). In standard SQL, they are not\nequivalent. INNER JOIN is used with an ON clause, CROSS JOIN is used\notherwise.\n\nIn general, parentheses can be ignored in join expressions containing\nonly inner join operations. MySQL also supports nested joins (see\nhttp://dev.mysql.com/doc/refman/5.6/en/nested-join-optimization.html).\n\nIndex hints can be specified to affect how the MySQL optimizer makes\nuse of indexes. For more information, see\nhttp://dev.mysql.com/doc/refman/5.6/en/index-hints.html.\n\nURL: http://dev.mysql.com/doc/refman/5.6/en/join.html\n\n',	'SELECT left_tbl.*\n  FROM left_tbl LEFT JOIN right_tbl ON left_tbl.id = right_tbl.id\n  WHERE right_tbl.id IS NULL;\n',	'http://dev.mysql.com/doc/refman/5.6/en/join.html'),
 (1,	'HEX',	38,	'Syntax:\nHEX(str), HEX(N)\n\nFor a string argument str, HEX() returns a hexadecimal string\nrepresentation of str where each byte of each character in str is\nconverted to two hexadecimal digits. (Multibyte characters therefore\nbecome more than two digits.) The inverse of this operation is\nperformed by the UNHEX() function.\n\nFor a numeric argument N, HEX() returns a hexadecimal string\nrepresentation of the value of N treated as a longlong (BIGINT) number.\nThis is equivalent to CONV(N,10,16). The inverse of this operation is\nperformed by CONV(HEX(N),16,10).\n\nURL: http://dev.mysql.com/doc/refman/5.6/en/string-functions.html\n\n',	'mysql> SELECT 0x616263, HEX(\'abc\'), UNHEX(HEX(\'abc\'));\n        -> \'abc\', 616263, \'abc\'\nmysql> SELECT HEX(255), CONV(HEX(255),16,10);\n        -> \'FF\', 255\n',	'http://dev.mysql.com/doc/refman/5.6/en/string-functions.html'),
@@ -2362,6 +2372,7 @@ CREATE TABLE `innodb_index_stats` (
   PRIMARY KEY (`database_name`,`table_name`,`index_name`,`stat_name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin STATS_PERSISTENT=0;
 
+TRUNCATE `innodb_index_stats`;
 INSERT INTO `innodb_index_stats` (`database_name`, `table_name`, `index_name`, `last_update`, `stat_name`, `stat_value`, `sample_size`, `stat_description`) VALUES
 ('maia',	'awl',	'PRIMARY',	'2015-06-04 10:25:47',	'n_diff_pfx01',	0,	1,	'username'),
 ('maia',	'awl',	'PRIMARY',	'2015-06-04 10:25:47',	'n_diff_pfx02',	0,	1,	'username,email'),
@@ -2509,14 +2520,14 @@ INSERT INTO `innodb_index_stats` (`database_name`, `table_name`, `index_name`, `
 ('roundcube',	'contactgroups',	'contactgroups_user_index',	'2015-06-05 09:59:17',	'n_diff_pfx03',	0,	1,	'user_id,del,contactgroup_id'),
 ('roundcube',	'contactgroups',	'contactgroups_user_index',	'2015-06-05 09:59:17',	'n_leaf_pages',	1,	NULL,	'Number of leaf pages in the index'),
 ('roundcube',	'contactgroups',	'contactgroups_user_index',	'2015-06-05 09:59:17',	'size',	1,	NULL,	'Number of pages in the index'),
-('roundcube',	'contacts',	'PRIMARY',	'2015-06-05 09:59:17',	'n_diff_pfx01',	0,	1,	'contact_id'),
-('roundcube',	'contacts',	'PRIMARY',	'2015-06-05 09:59:17',	'n_leaf_pages',	1,	NULL,	'Number of leaf pages in the index'),
-('roundcube',	'contacts',	'PRIMARY',	'2015-06-05 09:59:17',	'size',	1,	NULL,	'Number of pages in the index'),
-('roundcube',	'contacts',	'user_contacts_index',	'2015-06-05 09:59:17',	'n_diff_pfx01',	0,	1,	'user_id'),
-('roundcube',	'contacts',	'user_contacts_index',	'2015-06-05 09:59:17',	'n_diff_pfx02',	0,	1,	'user_id,del'),
-('roundcube',	'contacts',	'user_contacts_index',	'2015-06-05 09:59:17',	'n_diff_pfx03',	0,	1,	'user_id,del,contact_id'),
-('roundcube',	'contacts',	'user_contacts_index',	'2015-06-05 09:59:17',	'n_leaf_pages',	1,	NULL,	'Number of leaf pages in the index'),
-('roundcube',	'contacts',	'user_contacts_index',	'2015-06-05 09:59:17',	'size',	1,	NULL,	'Number of pages in the index'),
+('roundcube',	'contacts',	'PRIMARY',	'2015-06-25 07:46:33',	'n_diff_pfx01',	2,	1,	'contact_id'),
+('roundcube',	'contacts',	'PRIMARY',	'2015-06-25 07:46:33',	'n_leaf_pages',	8,	NULL,	'Number of leaf pages in the index'),
+('roundcube',	'contacts',	'PRIMARY',	'2015-06-25 07:46:33',	'size',	9,	NULL,	'Number of pages in the index'),
+('roundcube',	'contacts',	'user_contacts_index',	'2015-06-25 07:46:33',	'n_diff_pfx01',	2,	1,	'user_id'),
+('roundcube',	'contacts',	'user_contacts_index',	'2015-06-25 07:46:33',	'n_diff_pfx02',	2,	1,	'user_id,del'),
+('roundcube',	'contacts',	'user_contacts_index',	'2015-06-25 07:46:33',	'n_diff_pfx03',	2,	1,	'user_id,del,contact_id'),
+('roundcube',	'contacts',	'user_contacts_index',	'2015-06-25 07:46:33',	'n_leaf_pages',	1,	NULL,	'Number of leaf pages in the index'),
+('roundcube',	'contacts',	'user_contacts_index',	'2015-06-25 07:46:33',	'size',	1,	NULL,	'Number of pages in the index'),
 ('roundcube',	'dictionary',	'GEN_CLUST_INDEX',	'2015-06-05 09:59:17',	'n_diff_pfx01',	0,	1,	'DB_ROW_ID'),
 ('roundcube',	'dictionary',	'GEN_CLUST_INDEX',	'2015-06-05 09:59:17',	'n_leaf_pages',	1,	NULL,	'Number of leaf pages in the index'),
 ('roundcube',	'dictionary',	'GEN_CLUST_INDEX',	'2015-06-05 09:59:17',	'size',	1,	NULL,	'Number of pages in the index'),
@@ -2524,19 +2535,19 @@ INSERT INTO `innodb_index_stats` (`database_name`, `table_name`, `index_name`, `
 ('roundcube',	'dictionary',	'uniqueness',	'2015-06-05 09:59:17',	'n_diff_pfx02',	0,	1,	'user_id,language'),
 ('roundcube',	'dictionary',	'uniqueness',	'2015-06-05 09:59:17',	'n_leaf_pages',	1,	NULL,	'Number of leaf pages in the index'),
 ('roundcube',	'dictionary',	'uniqueness',	'2015-06-05 09:59:17',	'size',	1,	NULL,	'Number of pages in the index'),
-('roundcube',	'identities',	'PRIMARY',	'2015-06-05 10:09:31',	'n_diff_pfx01',	2,	1,	'identity_id'),
-('roundcube',	'identities',	'PRIMARY',	'2015-06-05 10:09:31',	'n_leaf_pages',	1,	NULL,	'Number of leaf pages in the index'),
-('roundcube',	'identities',	'PRIMARY',	'2015-06-05 10:09:31',	'size',	1,	NULL,	'Number of pages in the index'),
-('roundcube',	'identities',	'email_identities_index',	'2015-06-05 10:09:31',	'n_diff_pfx01',	2,	1,	'email'),
-('roundcube',	'identities',	'email_identities_index',	'2015-06-05 10:09:31',	'n_diff_pfx02',	2,	1,	'email,del'),
-('roundcube',	'identities',	'email_identities_index',	'2015-06-05 10:09:31',	'n_diff_pfx03',	2,	1,	'email,del,identity_id'),
-('roundcube',	'identities',	'email_identities_index',	'2015-06-05 10:09:31',	'n_leaf_pages',	1,	NULL,	'Number of leaf pages in the index'),
-('roundcube',	'identities',	'email_identities_index',	'2015-06-05 10:09:31',	'size',	1,	NULL,	'Number of pages in the index'),
-('roundcube',	'identities',	'user_identities_index',	'2015-06-05 10:09:31',	'n_diff_pfx01',	2,	1,	'user_id'),
-('roundcube',	'identities',	'user_identities_index',	'2015-06-05 10:09:31',	'n_diff_pfx02',	2,	1,	'user_id,del'),
-('roundcube',	'identities',	'user_identities_index',	'2015-06-05 10:09:31',	'n_diff_pfx03',	2,	1,	'user_id,del,identity_id'),
-('roundcube',	'identities',	'user_identities_index',	'2015-06-05 10:09:31',	'n_leaf_pages',	1,	NULL,	'Number of leaf pages in the index'),
-('roundcube',	'identities',	'user_identities_index',	'2015-06-05 10:09:31',	'size',	1,	NULL,	'Number of pages in the index'),
+('roundcube',	'identities',	'PRIMARY',	'2015-06-25 07:07:04',	'n_diff_pfx01',	4,	1,	'identity_id'),
+('roundcube',	'identities',	'PRIMARY',	'2015-06-25 07:07:04',	'n_leaf_pages',	1,	NULL,	'Number of leaf pages in the index'),
+('roundcube',	'identities',	'PRIMARY',	'2015-06-25 07:07:04',	'size',	1,	NULL,	'Number of pages in the index'),
+('roundcube',	'identities',	'email_identities_index',	'2015-06-25 07:07:04',	'n_diff_pfx01',	2,	1,	'email'),
+('roundcube',	'identities',	'email_identities_index',	'2015-06-25 07:07:04',	'n_diff_pfx02',	2,	1,	'email,del'),
+('roundcube',	'identities',	'email_identities_index',	'2015-06-25 07:07:04',	'n_diff_pfx03',	4,	1,	'email,del,identity_id'),
+('roundcube',	'identities',	'email_identities_index',	'2015-06-25 07:07:04',	'n_leaf_pages',	1,	NULL,	'Number of leaf pages in the index'),
+('roundcube',	'identities',	'email_identities_index',	'2015-06-25 07:07:04',	'size',	1,	NULL,	'Number of pages in the index'),
+('roundcube',	'identities',	'user_identities_index',	'2015-06-25 07:07:04',	'n_diff_pfx01',	4,	1,	'user_id'),
+('roundcube',	'identities',	'user_identities_index',	'2015-06-25 07:07:04',	'n_diff_pfx02',	4,	1,	'user_id,del'),
+('roundcube',	'identities',	'user_identities_index',	'2015-06-25 07:07:04',	'n_diff_pfx03',	4,	1,	'user_id,del,identity_id'),
+('roundcube',	'identities',	'user_identities_index',	'2015-06-25 07:07:04',	'n_leaf_pages',	1,	NULL,	'Number of leaf pages in the index'),
+('roundcube',	'identities',	'user_identities_index',	'2015-06-25 07:07:04',	'size',	1,	NULL,	'Number of pages in the index'),
 ('roundcube',	'searches',	'PRIMARY',	'2015-06-05 09:59:17',	'n_diff_pfx01',	0,	1,	'search_id'),
 ('roundcube',	'searches',	'PRIMARY',	'2015-06-05 09:59:17',	'n_leaf_pages',	1,	NULL,	'Number of leaf pages in the index'),
 ('roundcube',	'searches',	'PRIMARY',	'2015-06-05 09:59:17',	'size',	1,	NULL,	'Number of pages in the index'),
@@ -2545,23 +2556,23 @@ INSERT INTO `innodb_index_stats` (`database_name`, `table_name`, `index_name`, `
 ('roundcube',	'searches',	'uniqueness',	'2015-06-05 09:59:17',	'n_diff_pfx03',	0,	1,	'user_id,type,name'),
 ('roundcube',	'searches',	'uniqueness',	'2015-06-05 09:59:17',	'n_leaf_pages',	1,	NULL,	'Number of leaf pages in the index'),
 ('roundcube',	'searches',	'uniqueness',	'2015-06-05 09:59:17',	'size',	1,	NULL,	'Number of pages in the index'),
-('roundcube',	'session',	'PRIMARY',	'2015-06-23 09:29:30',	'n_diff_pfx01',	2,	1,	'sess_id'),
-('roundcube',	'session',	'PRIMARY',	'2015-06-23 09:29:30',	'n_leaf_pages',	1,	NULL,	'Number of leaf pages in the index'),
-('roundcube',	'session',	'PRIMARY',	'2015-06-23 09:29:30',	'size',	1,	NULL,	'Number of pages in the index'),
-('roundcube',	'session',	'changed_index',	'2015-06-23 09:29:30',	'n_diff_pfx01',	2,	1,	'changed'),
-('roundcube',	'session',	'changed_index',	'2015-06-23 09:29:30',	'n_diff_pfx02',	2,	1,	'changed,sess_id'),
-('roundcube',	'session',	'changed_index',	'2015-06-23 09:29:30',	'n_leaf_pages',	1,	NULL,	'Number of leaf pages in the index'),
-('roundcube',	'session',	'changed_index',	'2015-06-23 09:29:30',	'size',	1,	NULL,	'Number of pages in the index'),
+('roundcube',	'session',	'PRIMARY',	'2015-06-29 12:34:25',	'n_diff_pfx01',	2,	1,	'sess_id'),
+('roundcube',	'session',	'PRIMARY',	'2015-06-29 12:34:25',	'n_leaf_pages',	1,	NULL,	'Number of leaf pages in the index'),
+('roundcube',	'session',	'PRIMARY',	'2015-06-29 12:34:25',	'size',	1,	NULL,	'Number of pages in the index'),
+('roundcube',	'session',	'changed_index',	'2015-06-29 12:34:25',	'n_diff_pfx01',	2,	1,	'changed'),
+('roundcube',	'session',	'changed_index',	'2015-06-29 12:34:25',	'n_diff_pfx02',	2,	1,	'changed,sess_id'),
+('roundcube',	'session',	'changed_index',	'2015-06-29 12:34:25',	'n_leaf_pages',	1,	NULL,	'Number of leaf pages in the index'),
+('roundcube',	'session',	'changed_index',	'2015-06-29 12:34:25',	'size',	1,	NULL,	'Number of pages in the index'),
 ('roundcube',	'system',	'PRIMARY',	'2015-06-05 09:59:17',	'n_diff_pfx01',	0,	1,	'name'),
 ('roundcube',	'system',	'PRIMARY',	'2015-06-05 09:59:17',	'n_leaf_pages',	1,	NULL,	'Number of leaf pages in the index'),
 ('roundcube',	'system',	'PRIMARY',	'2015-06-05 09:59:17',	'size',	1,	NULL,	'Number of pages in the index'),
-('roundcube',	'users',	'PRIMARY',	'2015-06-05 10:09:31',	'n_diff_pfx01',	2,	1,	'user_id'),
-('roundcube',	'users',	'PRIMARY',	'2015-06-05 10:09:31',	'n_leaf_pages',	1,	NULL,	'Number of leaf pages in the index'),
-('roundcube',	'users',	'PRIMARY',	'2015-06-05 10:09:31',	'size',	1,	NULL,	'Number of pages in the index'),
-('roundcube',	'users',	'username',	'2015-06-05 10:09:31',	'n_diff_pfx01',	2,	1,	'username'),
-('roundcube',	'users',	'username',	'2015-06-05 10:09:31',	'n_diff_pfx02',	2,	1,	'username,mail_host'),
-('roundcube',	'users',	'username',	'2015-06-05 10:09:31',	'n_leaf_pages',	1,	NULL,	'Number of leaf pages in the index'),
-('roundcube',	'users',	'username',	'2015-06-05 10:09:31',	'size',	1,	NULL,	'Number of pages in the index');
+('roundcube',	'users',	'PRIMARY',	'2015-06-25 07:07:04',	'n_diff_pfx01',	4,	1,	'user_id'),
+('roundcube',	'users',	'PRIMARY',	'2015-06-25 07:07:04',	'n_leaf_pages',	1,	NULL,	'Number of leaf pages in the index'),
+('roundcube',	'users',	'PRIMARY',	'2015-06-25 07:07:04',	'size',	1,	NULL,	'Number of pages in the index'),
+('roundcube',	'users',	'username',	'2015-06-25 07:07:04',	'n_diff_pfx01',	2,	1,	'username'),
+('roundcube',	'users',	'username',	'2015-06-25 07:07:04',	'n_diff_pfx02',	4,	1,	'username,mail_host'),
+('roundcube',	'users',	'username',	'2015-06-25 07:07:04',	'n_leaf_pages',	1,	NULL,	'Number of leaf pages in the index'),
+('roundcube',	'users',	'username',	'2015-06-25 07:07:04',	'size',	1,	NULL,	'Number of pages in the index');
 
 DROP TABLE IF EXISTS `innodb_table_stats`;
 CREATE TABLE `innodb_table_stats` (
@@ -2574,6 +2585,7 @@ CREATE TABLE `innodb_table_stats` (
   PRIMARY KEY (`database_name`,`table_name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin STATS_PERSISTENT=0;
 
+TRUNCATE `innodb_table_stats`;
 INSERT INTO `innodb_table_stats` (`database_name`, `table_name`, `last_update`, `n_rows`, `clustered_index_size`, `sum_of_other_index_sizes`) VALUES
 ('maia',	'awl',	'2015-06-04 10:25:47',	0,	1,	0),
 ('maia',	'bayes_expire',	'2015-06-04 10:25:47',	0,	1,	1),
@@ -2597,13 +2609,13 @@ INSERT INTO `innodb_table_stats` (`database_name`, `table_name`, `last_update`, 
 ('roundcube',	'cache_thread',	'2015-06-05 09:59:17',	0,	1,	1),
 ('roundcube',	'contactgroupmembers',	'2015-06-05 09:59:17',	0,	1,	1),
 ('roundcube',	'contactgroups',	'2015-06-05 09:59:17',	0,	1,	1),
-('roundcube',	'contacts',	'2015-06-05 09:59:17',	0,	1,	1),
+('roundcube',	'contacts',	'2015-06-25 07:46:33',	2,	9,	1),
 ('roundcube',	'dictionary',	'2015-06-05 09:59:17',	0,	1,	1),
-('roundcube',	'identities',	'2015-06-05 10:09:31',	2,	1,	2),
+('roundcube',	'identities',	'2015-06-25 07:07:04',	4,	1,	2),
 ('roundcube',	'searches',	'2015-06-05 09:59:17',	0,	1,	1),
-('roundcube',	'session',	'2015-06-23 09:29:30',	2,	1,	1),
+('roundcube',	'session',	'2015-06-29 12:34:25',	2,	1,	1),
 ('roundcube',	'system',	'2015-06-05 09:59:17',	0,	1,	0),
-('roundcube',	'users',	'2015-06-05 10:09:31',	2,	1,	1);
+('roundcube',	'users',	'2015-06-25 07:07:04',	4,	1,	1);
 
 DROP TABLE IF EXISTS `ndb_binlog_index`;
 CREATE TABLE `ndb_binlog_index` (
@@ -2620,6 +2632,7 @@ CREATE TABLE `ndb_binlog_index` (
   PRIMARY KEY (`epoch`,`orig_server_id`,`orig_epoch`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
+TRUNCATE `ndb_binlog_index`;
 
 DROP TABLE IF EXISTS `plugin`;
 CREATE TABLE `plugin` (
@@ -2628,6 +2641,7 @@ CREATE TABLE `plugin` (
   PRIMARY KEY (`name`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='MySQL plugins';
 
+TRUNCATE `plugin`;
 
 DROP TABLE IF EXISTS `proc`;
 CREATE TABLE `proc` (
@@ -2654,6 +2668,7 @@ CREATE TABLE `proc` (
   PRIMARY KEY (`db`,`name`,`type`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='Stored Procedures';
 
+TRUNCATE `proc`;
 
 DROP TABLE IF EXISTS `procs_priv`;
 CREATE TABLE `procs_priv` (
@@ -2669,6 +2684,7 @@ CREATE TABLE `procs_priv` (
   KEY `Grantor` (`Grantor`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='Procedure privileges';
 
+TRUNCATE `procs_priv`;
 
 DROP TABLE IF EXISTS `proxies_priv`;
 CREATE TABLE `proxies_priv` (
@@ -2683,6 +2699,7 @@ CREATE TABLE `proxies_priv` (
   KEY `Grantor` (`Grantor`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='User proxy privileges';
 
+TRUNCATE `proxies_priv`;
 INSERT INTO `proxies_priv` (`Host`, `User`, `Proxied_host`, `Proxied_user`, `With_grant`, `Grantor`, `Timestamp`) VALUES
 ('localhost',	'root',	'',	'',	1,	'',	'2015-06-04 10:02:00'),
 ('host',	'root',	'',	'',	1,	'',	'2015-06-04 10:02:00');
@@ -2701,6 +2718,7 @@ CREATE TABLE `servers` (
   PRIMARY KEY (`Server_name`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='MySQL Foreign Servers table';
 
+TRUNCATE `servers`;
 
 DROP TABLE IF EXISTS `slave_master_info`;
 CREATE TABLE `slave_master_info` (
@@ -2730,6 +2748,7 @@ CREATE TABLE `slave_master_info` (
   PRIMARY KEY (`Host`,`Port`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 STATS_PERSISTENT=0 COMMENT='Master Information';
 
+TRUNCATE `slave_master_info`;
 
 DROP TABLE IF EXISTS `slave_relay_log_info`;
 CREATE TABLE `slave_relay_log_info` (
@@ -2744,6 +2763,7 @@ CREATE TABLE `slave_relay_log_info` (
   PRIMARY KEY (`Id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 STATS_PERSISTENT=0 COMMENT='Relay Log Information';
 
+TRUNCATE `slave_relay_log_info`;
 
 DROP TABLE IF EXISTS `slave_worker_info`;
 CREATE TABLE `slave_worker_info` (
@@ -2762,6 +2782,7 @@ CREATE TABLE `slave_worker_info` (
   PRIMARY KEY (`Id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 STATS_PERSISTENT=0 COMMENT='Worker Information';
 
+TRUNCATE `slave_worker_info`;
 
 DROP TABLE IF EXISTS `slow_log`;
 CREATE TABLE `slow_log` (
@@ -2779,6 +2800,7 @@ CREATE TABLE `slow_log` (
   `thread_id` bigint(21) unsigned NOT NULL
 ) ENGINE=CSV DEFAULT CHARSET=utf8 COMMENT='Slow log';
 
+TRUNCATE `slow_log`;
 
 DROP TABLE IF EXISTS `tables_priv`;
 CREATE TABLE `tables_priv` (
@@ -2794,6 +2816,7 @@ CREATE TABLE `tables_priv` (
   KEY `Grantor` (`Grantor`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='Table privileges';
 
+TRUNCATE `tables_priv`;
 
 DROP TABLE IF EXISTS `time_zone`;
 CREATE TABLE `time_zone` (
@@ -2802,6 +2825,7 @@ CREATE TABLE `time_zone` (
   PRIMARY KEY (`Time_zone_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='Time zones';
 
+TRUNCATE `time_zone`;
 
 DROP TABLE IF EXISTS `time_zone_leap_second`;
 CREATE TABLE `time_zone_leap_second` (
@@ -2810,6 +2834,7 @@ CREATE TABLE `time_zone_leap_second` (
   PRIMARY KEY (`Transition_time`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='Leap seconds information for time zones';
 
+TRUNCATE `time_zone_leap_second`;
 
 DROP TABLE IF EXISTS `time_zone_name`;
 CREATE TABLE `time_zone_name` (
@@ -2818,6 +2843,7 @@ CREATE TABLE `time_zone_name` (
   PRIMARY KEY (`Name`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='Time zone names';
 
+TRUNCATE `time_zone_name`;
 
 DROP TABLE IF EXISTS `time_zone_transition`;
 CREATE TABLE `time_zone_transition` (
@@ -2827,6 +2853,7 @@ CREATE TABLE `time_zone_transition` (
   PRIMARY KEY (`Time_zone_id`,`Transition_time`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='Time zone transitions';
 
+TRUNCATE `time_zone_transition`;
 
 DROP TABLE IF EXISTS `time_zone_transition_type`;
 CREATE TABLE `time_zone_transition_type` (
@@ -2838,6 +2865,7 @@ CREATE TABLE `time_zone_transition_type` (
   PRIMARY KEY (`Time_zone_id`,`Transition_type_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='Time zone transition types';
 
+TRUNCATE `time_zone_transition_type`;
 
 DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
@@ -2887,6 +2915,7 @@ CREATE TABLE `user` (
   PRIMARY KEY (`Host`,`User`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='Users and global privileges';
 
+TRUNCATE `user`;
 INSERT INTO `user` (`Host`, `User`, `Password`, `Select_priv`, `Insert_priv`, `Update_priv`, `Delete_priv`, `Create_priv`, `Drop_priv`, `Reload_priv`, `Shutdown_priv`, `Process_priv`, `File_priv`, `Grant_priv`, `References_priv`, `Index_priv`, `Alter_priv`, `Show_db_priv`, `Super_priv`, `Create_tmp_table_priv`, `Lock_tables_priv`, `Execute_priv`, `Repl_slave_priv`, `Repl_client_priv`, `Create_view_priv`, `Show_view_priv`, `Create_routine_priv`, `Alter_routine_priv`, `Create_user_priv`, `Event_priv`, `Trigger_priv`, `Create_tablespace_priv`, `ssl_type`, `ssl_cipher`, `x509_issuer`, `x509_subject`, `max_questions`, `max_updates`, `max_connections`, `max_user_connections`, `plugin`, `authentication_string`, `password_expired`) VALUES
 ('localhost',	'root',	'',	'Y',	'Y',	'Y',	'Y',	'Y',	'Y',	'Y',	'Y',	'Y',	'Y',	'Y',	'Y',	'Y',	'Y',	'Y',	'Y',	'Y',	'Y',	'Y',	'Y',	'Y',	'Y',	'Y',	'Y',	'Y',	'Y',	'Y',	'Y',	'Y',	'',	'',	'',	'',	0,	0,	0,	0,	'mysql_native_password',	'',	'N'),
 ('host',	'root',	'',	'Y',	'Y',	'Y',	'Y',	'Y',	'Y',	'Y',	'Y',	'Y',	'Y',	'Y',	'Y',	'Y',	'Y',	'Y',	'Y',	'Y',	'Y',	'Y',	'Y',	'Y',	'Y',	'Y',	'Y',	'Y',	'Y',	'Y',	'Y',	'Y',	'',	'',	'',	'',	0,	0,	0,	0,	'mysql_native_password',	'',	'N'),
@@ -2896,4 +2925,4 @@ INSERT INTO `user` (`Host`, `User`, `Password`, `Select_priv`, `Insert_priv`, `U
 ('localhost',	'vscan',	'',	'N',	'N',	'N',	'N',	'N',	'N',	'N',	'N',	'N',	'N',	'N',	'N',	'N',	'N',	'N',	'N',	'N',	'N',	'N',	'N',	'N',	'N',	'N',	'N',	'N',	'N',	'N',	'N',	'N',	'',	'',	'',	'',	0,	0,	0,	0,	'mysql_native_password',	'',	'N'),
 ('localhost',	'roundcube',	'',	'N',	'N',	'N',	'N',	'N',	'N',	'N',	'N',	'N',	'N',	'N',	'N',	'N',	'N',	'N',	'N',	'N',	'N',	'N',	'N',	'N',	'N',	'N',	'N',	'N',	'N',	'N',	'N',	'N',	'',	'',	'',	'',	0,	0,	0,	0,	'mysql_native_password',	'',	'N');
 
--- 2015-06-24 12:05:30
+-- 2015-06-30 01:32:55
