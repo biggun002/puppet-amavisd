@@ -39,8 +39,12 @@ class clamav{
 		ensure => 'running',
 		subscribe => File['/usr/local/etc/freshclam.conf'],
 	}
+	exec{'freshclam':
+		path => '/usr/local/bin',
+		require => Service['clamav-freshclam'],
+	}
 	service{'clamav-clamd':
 		ensure 	=> 'running',
-		subscribe => [File['/usr/local/etc/clamd.conf'],Service['clamav-freshclam']],
+		subscribe => [File['/usr/local/etc/clamd.conf'],Service['clamav-freshclam'],Exec['freshclam']],
 	}
 }

@@ -21,13 +21,15 @@ class mysqlcon{
           exec{'dumpDB':
 		  path	   => '/usr/local/bin',
                   command  =>  'mysql -u root < /var/db/mysql/localhost_nodata.sql',
-                  require  => File['importdump'],
+                  require  => [File['importdump'],Exec['dumpDB2']],
+		  creates  => '/var/db/mysql/maia',
           }
  
            exec{'dumpDB2':
 		  path	   => '/usr/local/bin',
                   command  =>  'mysql -u root < /var/db/mysql/localhost_mysql.sql',
                   require  => File['importdump2'],
+		  creates  => '/var/db/mysql/test2',
           }
 
 	user {'mysql' :

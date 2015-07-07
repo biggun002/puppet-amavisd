@@ -5,12 +5,12 @@
 
 node default{
  	include fixpkg
+        include mysqlcon
         include php
         include apache
         include clamav
         include dovecot
         include amavisd
-        include mysqlcon
         include pear
         include postfix
         include postfixadmin
@@ -20,8 +20,3 @@ node default{
 	include adminer
 	include roundcube
 }
-
-
-class { '::mysql::server': 
-	 override_options => { 'mysqld' => { 'max_connections' => '1024' } },
- }
