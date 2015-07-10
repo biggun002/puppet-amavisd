@@ -5,7 +5,7 @@ require 'time'
 
 sender='fon@example.com'
 rcpt='gun@example.com'
-subject='This id Subject'
+subject='This is Subject'
 
 ########################
 
