@@ -28,7 +28,7 @@ smtpd_relay_restrictions = permit_mynetworks permit_sasl_authenticated defer_una
 smtpd_recipient_restrictions =
   permit_mynetworks,
   permit_sasl_authenticated,
-  reject_non_fqdn_hostname,
+#  reject_non_fqdn_hostname,
   reject_non_fqdn_sender,
   reject_non_fqdn_recipient,
   reject_unauth_destination,
@@ -48,7 +48,7 @@ smtpd_sasl_authenticated_header = yes
 smtpd_sasl_local_domain = $myhostname
 smtpd_sasl_security_options = noanonymous
 smtpd_sasl_type = dovecot
-smtpd_sasl_path = private/auth
+smtpd_sasl_path = inet:10.10.6.91:1434
 
 # TLS CONFIG
 smtp_use_tls = yes
@@ -71,7 +71,7 @@ virtual_mailbox_domains = proxy:mysql:/usr/local/etc/postfix/mysql_virtual_domai
 virtual_mailbox_limit = 51200000
 virtual_mailbox_maps = proxy:mysql:/usr/local/etc/postfix/mysql_virtual_mailbox_maps.cf
 virtual_minimum_uid = 125
-virtual_transport = dovecot
+virtual_transport = lmtp:inet:10.10.6.91:24
 virtual_uid_maps = static:125
 
 # Additional for quota support

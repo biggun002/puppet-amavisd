@@ -2,6 +2,14 @@ class apache{
 	package{'apache24':
 		ensure => 'present',
 	}
+        $pkg='apache24'   
+        $str="${pkg}_enable=\"YES\""
+        exec {'echorcconf':
+                command => "echo ${str}>> /etc/rc.conf",
+                path => ['/bin','/usr/bin/'],
+                unless=> "grep ${str} /etc/rc.conf",
+                require => Package["${pkg}"],
+        }
 	file{'/usr/local/etc/apache24/httpd.conf':
 		source => 'puppet:///modules/apache/httpd.conf',
 		ensure => 'file',

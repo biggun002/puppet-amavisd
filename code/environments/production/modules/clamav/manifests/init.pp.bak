@@ -1,7 +1,21 @@
 class clamav{
 	package{'clamav':
 		ensure	=> 'present',
-                source => 'http://puppetmaster:3680/pkg',
+	}
+        $pkg='clamav'   
+        $str="${pkg}_freshclam_enable=\"YES\""
+        $str2="${pkg}_clamd_enable=\"YES\""
+        exec {'echorcconf':
+                command => "echo ${str}>> /etc/rc.conf",
+                path => ['/bin','/usr/bin/'],
+                unless=> "grep ${str} /etc/rc.conf",
+                require => Package["${pkg}"],
+        }
+        exec {'echorcconf2':
+                command => "echo ${str2}>> /etc/rc.conf",
+                path => ['/bin','/usr/bin/'],
+                unless=> "grep ${str2} /etc/rc.conf",
+                require => Package["${pkg}"],
 	}
 	user{'vscan':
 		ensure => 'present',
@@ -25,10 +39,9 @@ class clamav{
 	}
 	file{'/var/run/clamav':
 		ensure => 'directory',
-		mode => '0777',
-		recurse => 'true',
 		require => [Package['clamav'],User['vscan']],
 		owner => 'clamav',
+		ignore => 'clamd.sock',
 	}
 	file{'/var/db/clamav':
 		ensure => 'directory',
@@ -41,8 +54,12 @@ class clamav{
 		ensure => 'running',
 		subscribe => File['/usr/local/etc/freshclam.conf'],
 	}
+	exec{'freshclam':
+		path => '/usr/local/bin',
+		require => Service['clamav-freshclam'],
+	}
 	service{'clamav-clamd':
 		ensure 	=> 'running',
-		subscribe => [File['/usr/local/etc/clamd.conf'],Service['clamav-freshclam']],
+		subscribe => [File['/usr/local/etc/clamd.conf'],Service['clamav-freshclam'],Exec['freshclam']],
 	}
 }

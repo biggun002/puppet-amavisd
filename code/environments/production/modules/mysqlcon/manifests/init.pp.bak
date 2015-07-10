@@ -18,24 +18,18 @@ class mysqlcon{
                   source => 'puppet:///modules/mysqlcon/localhost_mysql.sql',
           }
  
-          mysql::db {'dumpDB':
-                  user     => 'root',
-                  password => '',
-		  dbname   => 'maia',
-                  host     => 'localhost',
-                  grant    => ['SELECT', 'INSERT', 'UPDATE', 'DELETE', 'CREATE', 'DROP'],
-                  sql      =>  '/var/db/mysql/localhost_nodata.sql',
-                  require  => File['importdump'],
+          exec{'dumpDB':
+		  path	   => '/usr/local/bin',
+                  command  =>  'mysql -u root < /var/db/mysql/localhost_nodata.sql',
+                  require  => [File['importdump'],Exec['dumpDB2']],
+		  creates  => '/var/db/mysql/maia',
           }
  
-           mysql::db {'dumpDB2':
-                   user     => 'root',
-                   password => '',
-		   dbname   => 'mysql',
-                   host     => 'localhost',
-                   grant    => ['SELECT', 'INSERT', 'UPDATE', 'DELETE', 'CREATE', 'DROP'],
-                   sql      =>  '/var/db/mysql/localhost_mysql.sql',
-                   require  => File['importdump2'],
+           exec{'dumpDB2':
+		  path	   => '/usr/local/bin',
+                  command  =>  'mysql -u root < /var/db/mysql/localhost_mysql.sql',
+                  require  => File['importdump2'],
+		  creates  => '/var/db/mysql/test2',
           }
 
 	user {'mysql' :
@@ -45,6 +39,20 @@ class mysqlcon{
 	package{'mysql56-server' :
 		ensure => 'present',
 	}
+	
+	$pkg='mysql'   
+        $str="${pkg}_enable=\"YES\""
+        exec {'rcconf-mysql':
+                command => "echo ${str}>> /etc/rc.conf",
+                path => ['/bin','/usr/bin/'],
+                unless=> "grep ${str} /etc/rc.conf",
+                require => Package["${pkg}56-server"],
+        }
+	
+#	service{'mysql-server':
+#		ensure => 'running',
+#		subscribe => File['/var/db/mysql/my.cnf'],
+#	}
 	
 	#mysql::db{'maia':
 	#	user => 'vscan',

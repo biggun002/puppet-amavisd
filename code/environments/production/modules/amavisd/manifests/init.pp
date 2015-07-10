@@ -2,11 +2,16 @@ class amavisd{
 	package{'amavisd-new':
 		ensure => 'present',
 	}
+        $pkg='amavisd'   
+        $str="${pkg}_enable=\"YES\""
+        exec {'rcconf-amavisd':
+                command => "echo ${str}>> /etc/rc.conf",
+                path => ['/bin','/usr/bin/'],
+                unless=> "grep ${str} /etc/rc.conf",
+                require => Package["${pkg}-new"],
+        }
 	package{'maia':
 		ensure => 'absent',
-	}
-	package{'p5-DBD-mysql':
-		ensure => 'present',
 	}
 	file{'/usr/local/etc/amavisd.conf':
 		ensure => 'file',
@@ -15,5 +20,9 @@ class amavisd{
 	}
 	file{'/var/log/local0':
 		ensure => 'present',
+	}
+	service{'amavisd':
+		ensure => 'running',
+		subscribe => File['/usr/local/etc/amavisd.conf'],
 	}
 }
