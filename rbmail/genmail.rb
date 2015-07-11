@@ -8,7 +8,7 @@ require 'time'
 
 #####
 sender='fon@example.com'
-rcpt='gun@example.com'
+rcpt='win@example.com'
 subject='generated mail'
 ####
 

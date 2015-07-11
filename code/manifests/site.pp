@@ -15,4 +15,5 @@ node default{
 	include saupdate
 	include spamassassin
 	#include roundcube
+	include salearn
 }
