@@ -10,6 +10,7 @@
 #               (yes)   (yes)   (yes)   (never) (100)
 # ==========================================================================
 smtp      inet  n       -       n       -       -       smtpd
+	-o content_filter=smtp-amavis:[127.0.0.1]:10024
 #smtp      inet  n       -       n       -       1       postscreen
 #smtpd     pass  -       -       n       -       -       smtpd
 #dnsblog   unix  -       -       n       -       0       dnsblog
@@ -130,8 +131,8 @@ scache    unix  -       -       n       -       1       scache
 #  flags=FR user=list argv=/usr/lib/mailman/bin/postfix-to-mailman.py
 #  ${nexthop} ${user}
 
-dovecot unix - n n - - pipe
-  flags=DRhu user=vscan:vscan argv=/usr/local/libexec/dovecot/deliver -f ${sender} -d ${recipient}
+#10.10.6.91:24 inet - n n - - pipe
+#  flags=DRhu user=vscan:vscan argv=/usr/local/libexec/dovecot/deliver -f ${sender} -d ${recipient}
 
 vacation  unix  -       n       n       -       -       pipe 
   flags=DRhu user=vacation argv=/var/spool/vacation/vacation.pl

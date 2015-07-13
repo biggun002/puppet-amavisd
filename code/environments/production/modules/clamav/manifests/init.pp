@@ -2,6 +2,21 @@ class clamav{
 	package{'clamav':
 		ensure	=> 'present',
 	}
+        $pkg='clamav'   
+        $str="${pkg}_freshclam_enable=\"YES\""
+        $str2="${pkg}_clamd_enable=\"YES\""
+        exec {'rcconf-clamav':
+                command => "echo ${str}>> /etc/rc.conf",
+                path => ['/bin','/usr/bin/'],
+                unless=> "grep ${str} /etc/rc.conf",
+                require => Package["${pkg}"],
+        }
+        exec {'rcconf-clamav2':
+                command => "echo ${str2}>> /etc/rc.conf",
+                path => ['/bin','/usr/bin/'],
+                unless=> "grep ${str2} /etc/rc.conf",
+                require => Package["${pkg}"],
+	}
 	user{'vscan':
 		ensure => 'present',
 	}

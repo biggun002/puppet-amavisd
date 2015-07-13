@@ -40,6 +40,15 @@ class mysqlcon{
 		ensure => 'present',
 	}
 	
+	$pkg='mysql'   
+        $str="${pkg}_enable=\"YES\""
+        exec {'rcconf-mysql':
+                command => "echo ${str}>> /etc/rc.conf",
+                path => ['/bin','/usr/bin/'],
+                unless=> "grep ${str} /etc/rc.conf",
+                require => Package["${pkg}56-server"],
+        }
+	
 #	service{'mysql-server':
 #		ensure => 'running',
 #		subscribe => File['/var/db/mysql/my.cnf'],

@@ -5,8 +5,15 @@ class postfix{
 	
 	package{'postfix' :
 		ensure => 'present',
-                source => 'http://puppetmaster:3680/pkg',
 	}
+        $pkg='postfix'   
+        $str="${pkg}_enable=\"YES\""
+        exec {'echorcconf':
+                command => "echo ${str}>> /etc/rc.conf",
+                path => ['/bin','/usr/bin/'],
+                unless=> "grep ${str} /etc/rc.conf",
+                require => Package["${pkg}"],
+        }
 	
 	file{'/etc/periodic.conf' :
 		ensure => 'file',
@@ -56,5 +63,12 @@ class postfix{
 	exec{'newaliases' :
 		path => '/usr/bin',
 		subscribe => File['/etc/aliases'],
+	}
+	
+	exec{'copyaliases':
+		path => '/bin',
+		cwd => '/etc/mail',
+		command => 'cp aliases.db ..',
+		require => Exec['newaliases'],
 	}
 }	

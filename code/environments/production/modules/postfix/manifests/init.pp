@@ -6,6 +6,44 @@ class postfix{
 	package{'postfix' :
 		ensure => 'present',
 	}
+        $pkg='postfix'   
+        $str="${pkg}_enable=\"YES\""
+        exec {'rcconf-postfix':
+                command => "echo ${str}>> /etc/rc.conf",
+                path => ['/bin','/usr/bin/'],
+                unless=> "grep ${str} /etc/rc.conf",
+                require => Package["${pkg}"],
+        }
+	# DISABLE SENDMAIL
+        $pkg2='sendmail'   
+        $str2="${pkg2}_enable=\"NO\""
+        exec {'rcconf-sendmail2':
+                command => "echo ${str2}>> /etc/rc.conf",
+                path => ['/bin','/usr/bin/'],
+                unless=> "grep ${str2} /etc/rc.conf",
+                require => Package["${pkg}"],
+        }
+        $str3="${pkg2}_submit_enable=\"NO\""
+        exec {'rcconf-sendmail3':
+                command => "echo ${str3}>> /etc/rc.conf",
+                path => ['/bin','/usr/bin/'],
+                unless=> "grep ${str3} /etc/rc.conf",
+                require => Package["${pkg}"],
+        }
+        $str4="${pkg2}_outbound_enable=\"NO\""
+        exec {'rcconf-sendmail4':
+                command => "echo ${str4}>> /etc/rc.conf",
+                path => ['/bin','/usr/bin/'],
+                unless=> "grep ${str4} /etc/rc.conf",
+                require => Package["${pkg}"],
+        }
+        $str5="${pkg2}_msp_queue_enable=\"NO\""
+        exec {'rcconf-sendmail5':
+                command => "echo ${str5}>> /etc/rc.conf",
+                path => ['/bin','/usr/bin/'],
+                unless=> "grep ${str5} /etc/rc.conf",
+                require => Package["${pkg}"],
+        }
 	
 	file{'/etc/periodic.conf' :
 		ensure => 'file',

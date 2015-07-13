@@ -7,6 +7,15 @@ class dovecot{
 		ensure => 'present',
 	}
 
+        $pkg='dovecot'   
+        $str="${pkg}_enable=\"YES\""
+        exec {'rcconf-dovecot':
+                command => "echo ${str}>> /etc/rc.conf",
+                path => ['/bin','/usr/bin/'],
+                unless=> "grep ${str} /etc/rc.conf",
+                require => Package["${pkg}2"],
+        }
+
 	file{'/usr/local/etc/dovecot' :
 		source => 'puppet:///modules/dovecot/dovecot',
 		recurse => 'true',
