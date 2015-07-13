@@ -1,37 +1,21 @@
 # puppet-amavisd
-# Install puppet
+## Install puppet
 
-use 
-``` puppet
-gem install puppet
-pkg install ca_root_nss
-mkdir -p /etc/puppetlabs/code/environments/production
-mkdir -p /etc/puppetlabs/code/manifests
+copy necessary files to the directory where installpuppet.sh will be running
 
-puppet module install zleslie-pkgng
-puppet module install puppetlabs-mysql
+- rc.d/puppet
+- rc.d/puppetmaster
+- puppet/puppet.conf
+- etc/pkgng.rb
 
+use [`installpuppet.sh`](https://github.com/biggun002/puppet-amavisd/blob/master/etc/installpuppet.sh) script to install required packages and gems, create directory structure and patch the copied necessary files to their proper locations.
+
+
+Notes: 
+**pkgng** was also edited here to optimize runtime
 ```
-### copy puppet configuration
-#### /etc/puppetlabs/puppet/puppet.conf
-
-
-### Make it run at startup
-#### /etc/rc.d/puppet
-#### /etc/rc.d/puppetmaster
-**don't forget to change permission to them**
-
-
-**pkgng** edit here to solve the problem
+/usr/local/lib/ruby/gems/2.1/gems/puppet-4.2.0/lib/puppet/provider/package/pkgng.rb
 ```
-/usr/local/lib/ruby/gems/2.1/gems/puppet-4.1.0/lib/puppet/provider/package/pkgng.rb
-```
-
-Rename all directory
-``` perl
-perl -e 'rename $_, "PRE_$_" for <*>'
-```
-
 
 ---
 
@@ -46,19 +30,7 @@ Default path
 * module เฉพาะในเครื่อง
 
 
-`/etc/puppetlabs/puppet/environments/production/modules`
 
-* module ทุกเครื่องใน environments
-
-`/etc/puppetlabs/puppet/modules`
-
-* แปลไม่ออก 55 ไม่น่าจะได้ใช้  ,, เขาบอกไม่ควรใช้ 55
-
-`/opt/puppet/share/puppet/modules`
-
-ดู module ทั้งหมดในเครื่อง
-
-```
 puppet module list
 ```
 
@@ -67,39 +39,7 @@ puppet module list
 tree -L 2 -d /etc/puppetlabs/puppet/environments/production/modules/ | less
 ```
 
-#NTP
 
-ไฟล์ที่จะถูกดูเป็นไฟล์แรกตอนใช้ puppet agent --test
-```
-/etc/puppetlabs/puppet/environments/production/manifests/site.pp
-```
-
-#MySql
-
-#Variable
-```
-class classname ( $parameter = 'default' ) {
-  ...
-}
-```
-```
-class {'classname': 
-  parameter => 'value',
-}
-```
-#Condition
-list fact
-```
-facter -p 
-```
-เอา fact ไปใช้
-```
-$::factname
-```
- * if statements
- * unless statements
- * case statements
- * selectors.
 
 
 
