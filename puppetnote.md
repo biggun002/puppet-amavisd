@@ -1,7 +1,5 @@
-# puppet-amavisd
+# puppet-maia
 # Install puppet
-
-use 
 ``` puppet
 gem install puppet
 pkg install ca_root_nss
