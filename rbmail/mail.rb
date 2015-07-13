@@ -1,15 +1,18 @@
 #!/usr/local/bin/ruby
 
 require 'net/smtp'
+require 'time'
 
 print 'How many mail?'
 x = gets.strip.to_i
+hdate = Time.now.httpdate
 
 for i in (1..x) do
 message = <<MESSAGE_END
 From: Fony<fon@example.com>
 To: Bob <win@example.com>
 Subject: You win the lottery, Money to you  #{i}
+Date: #{hdate}
 Contulations, free iPhone call me if you can
 MESSAGE_END
 

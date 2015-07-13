@@ -1,15 +1,16 @@
 #!/usr/local/bin/ruby
 
 require 'net/smtp'
-
+require 'time'
 print 'How many mail?'
 x = gets.strip.to_i
-
+hdate = Time.now.httpdate
 for i in (1..x) do
 message = <<MESSAGE_END
 From: Fony<fon@example.com>
-To: Bob <win@example.com>
-Subject: Spam #  #{i}
+To: Bob <gun@example.com>
+Subject: TEST #  #{i}
+Date: #{hdate}
 Special Containment Procedures: SCP-053 is to be contained in an area no less than 5 m x 5 m (16 ft x 16 ft) and given adequate room to move. Toys, books, games, and other recreational devices are to be amply provided and rotated every three (3) months. Proper bedding, bathroom, and medical facilities are to be maintained at all times. Food should be provided three (3) times daily, and two (2) snacks are allowed if requested.
 
 No physical contact is to be made with SCP-053 without full atmosphere-containment suit and eye shield. No eye contact is to be made with SCP-053 for any reason. Any objects given to personnel by SCP-053 may be removed, but must be given to quarantine for examination. Only one (1) member of personnel may be present in the room at any given time and must be secured by a safety line of steel cable. All personnel must be removed from SCP-053's containment chamber within 10 minutes of entering.
@@ -27,12 +28,12 @@ MESSAGE_END
    if i%2==0		
 	Net::SMTP.start('10.10.6.92') do |smtp|
 	  smtp.send_message message, 'fon@example.com',
-	                             'win@example.com'
+	                             'gun@example.com'
 	end
    else
 	Net::SMTP.start('10.10.6.93') do |smtp|
 	  smtp.send_message message, 'fon@example.com', 
-	                             'win@example.com'
+	                             'gun@example.com'
 	end
    end
 end
