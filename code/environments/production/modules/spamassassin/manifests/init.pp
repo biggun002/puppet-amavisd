@@ -23,9 +23,4 @@ class spamassassin{
 		unless => "grep ${str} /etc/syslog.conf",
 		require => File['/usr/local/etc/mail/spamassassin/local.cf'],
 	}
-	file{'/var/log/local0':
-		ensure => 'file',
-		owner => 'vscan',
-		require => Exec['syslogd-local0'],
-	}
 }

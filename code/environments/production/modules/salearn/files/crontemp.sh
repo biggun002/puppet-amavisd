@@ -2,7 +2,7 @@ host='example.com'
 #for real user #
 #
 #cat /etc/passwd | grep /home | cut -d: -f1  > users
-mysql -e "use postfix; select username from mailbox" > users
+mysql -h 10.10.6.91 -e "use postfix; select username from mailbox" > users
 sed -i '' -e '1,1d' users
 
 rm tempcron
