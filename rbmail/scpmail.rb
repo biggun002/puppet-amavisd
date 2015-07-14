@@ -4,6 +4,14 @@ require 'net/smtp'
 require 'rubygems'
 require 'nokogiri'
 require 'open-uri'
+require 'time'
+
+print 'To whom? (just nickname)'
+name = gets.strip
+sender='fony@example.com'
+rcpt = name+'@example.com'
+
+####
 
 print 'Start Chapter?'
 a = gets.strip.to_i
@@ -33,22 +41,21 @@ page = Nokogiri::HTML(open("http://www.scp-wiki.net/scp-#{y}"))
 
 
 message = <<MESSAGE_END
-From: Fony<fon@example.com>
-To: Kelvin <gun@example.com>
+From: Fony<#{sender}>
+To: Kelvin<#{rcpt}>
 Subject: SCP-#{y}
+Date: #{Time.now.httpdate}
 #{page.css('div#page-content')[0].text}
 MESSAGE_END
 
 #jfsaklfjewii123456789cvbnmkfsalssXJS*C4JDBQADN1.NSBN3*2IDNEN*GTUBE-STANDARD-ANTI-UBE-TEST-EMAIL*C.34Xpfowejbdfasiiehrfnvlszxdosp1`0
    if i%2==0		
 	Net::SMTP.start('10.10.6.92') do |smtp|
-	  smtp.send_message message, 'fon@example.com',
-	                             'gun@example.com'
+	  smtp.send_message message,sender,rcpt
 	end
    else
 	Net::SMTP.start('10.10.6.93') do |smtp|
-	  smtp.send_message message, 'fon@example.com', 
-	                             'gun@example.com'
+	  smtp.send_message message,sender,rcpt
 	end
    end
 end

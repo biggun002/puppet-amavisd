@@ -3,8 +3,11 @@
 require 'net/smtp'
 require 'time'
 
+print 'To whom? (just nickname)'
+name = gets.strip
+
 sender='fon@example.com'
-rcpt='gun@example.com'
+rcpt= name+'@example.com'
 subject='This is Subject'
 hdate =Time.now.httpdate
 
