@@ -1,5 +1,5 @@
 class adduser{
-	user{'testuser' :
+	user{'vscan' :
 		ensure => 'present',
 	}
 }

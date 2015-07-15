@@ -18,4 +18,14 @@ class postfixadmin{
 		ensure => 'file',
 		require => Package['postfixadmin'],	
 	}
+	file{'/usr/local/bin/postfixadmin-domain-postdeletion.sh':
+		source => 'puppet:///modules/postfixadmin/postfixadmin-domain-postdeletion.sh',
+		ensure => 'file',
+		require => Package['postfixadmin'],
+	}
+	file{'/usr/local/bin/postfixadmin-mailbox-postdeletion.sh':
+		source => 'puppet:///modules/postfixadmin/postfixadmin-mailbox-postdeletion.sh',
+		ensure => 'file',
+		require => Package['postfixadmin'],
+	}
 }

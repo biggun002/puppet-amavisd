@@ -17,17 +17,32 @@ pkg install -y ruby21-gems
 gem install puppet
 pkg install -y ca_root_nss
 pkg install -y vim-lite
-mkdir -p /etc/puppetlabs/code/environments/production/modules
-mkdir -p /etc/puppetlabs/code/manifests
-mkdir -p /etc/puppetlabs/puppet
+#mkdir -p /etc/puppetlabs/code/environments/production/modules
+#mkdir -p /etc/puppetlabs/code/manifests
+#mkdir -p /etc/puppetlabs/puppet
 
+pkg install -y git
+mkdir /etc/puppetlabs
+cd /etc/puppetlabs
+git clone https://github.com/biggun002/puppet-amavisd.git .
+
+cd ~
 cp pkgng.rb /usr/local/lib/ruby/gems/2.1/gems/puppet-4.2.0/lib/puppet/provider/package/pkgng.rb
 
-cp puppet /etc/rc.d/
-#cp puppetmaster /etc/rc.d/
-cp puppet.conf /etc/puppetlabs/puppet
+#cp puppet /etc/rc.d/
+cp puppetmaster /etc/rc.d/
+#cp puppet.conf /etc/puppetlabs/puppet
 
-echo 'puppet_enable="YES"' >> /etc/rc.conf
-#echo 'puppetmaster_enable="YES"' >> /etc/rc.conf
+#echo 'puppet_enable="YES"' >> /etc/rc.conf
+echo 'puppetmaster_enable="YES"' >> /etc/rc.conf
 
 echo 'puppet::::::::::' | adduser -w no -f
+
+### for peference
+echo "alias pup       cd /etc/puppetlabs" >> ~/.cshrc
+echo "alias mod       cd /etc/puppetlabs/code/environments/production/modules" >> ~/.cshrc
+source ~/.cshrc
+
+echo "set nu" > ~/.vimrc
+echo "set tabstop=4" >> ~/.vimrc
+echo "set colorscheme elflord" >> ~/.vimrc
