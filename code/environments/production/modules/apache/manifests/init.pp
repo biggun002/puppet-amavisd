@@ -15,12 +15,6 @@ class apache{
 		ensure => 'file',
 		require => Package['apache24'],
 	}
-	file{'/usr/local/etc/apache24/Includes':
-		source => 'puppet:///modules/apache/Includes',
-		ensure => 'true',
-		recurse => 'true',
-		require => Package['apache24'],
-	}
 	file{'/usr/local/etc/apache24/extra/httpd-ssl.conf':
 		source => 'puppet:///modules/apache/httpd-ssl.conf',
 		ensure => 'file',
